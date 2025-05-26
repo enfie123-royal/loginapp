@@ -1,0 +1,135 @@
+<div class="dashboard-container">
+  <h1>Welcome!</h1>
+  <p>Hello, {{ name }}</p>
+
+  <!-- Button to show car details -->
+  <button class="btn btn-primary mt-3" (click)="showCarDetails()">Show Car Details</button>
+
+  <!-- Button to add car details -->
+  <button class="btn btn-success mt-3 ms-2" (click)="openAddCarModal()">Add Car Details</button>
+
+  <!-- View Profile Button -->
+  <button class="btn btn-info mt-3 ms-2" (click)="viewProfile()">View Profile</button>
+
+  <button class="btn btn-warning mt-3 ms-2" (click)="goToServiceRequest()">Raise Service Request</button>
+  <!-- Display car details -->
+  <div class="mt-4" *ngIf="showTable">
+    <h3>Car Details:</h3>
+
+    <!-- Show message if no records are available -->
+    <div *ngIf="carDetails.length === 0" class="alert alert-info">
+      No car details available.
+    </div>
+
+    <!-- Show table if records are available -->
+    <table class="table table-bordered" *ngIf="carDetails.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Model</th>
+          <th>Year</th>
+          <th>License Plate</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let car of carDetails">
+          <td>{{ car.id }}</td>
+          <td>{{ car.model }}</td>
+          <td>{{ car.year }}</td>
+          <td>{{ car.licensePlate }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- User Profile Section -->
+  <div *ngIf="userProfile" class="card mt-3 mx-auto" style="max-width: 400px;">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <span>User Profile</span>
+      <button class="btn btn-link p-0" (click)="editingProfile = true" *ngIf="!editingProfile">
+        Edit Profile
+      </button>
+    </div>
+    <div class="card-body d-flex flex-column align-items-center text-center">
+      <!-- View Mode -->
+      <ng-container *ngIf="!editingProfile">
+        <p class="w-100 text-start"><strong>ID:</strong> {{ userProfile.id }}</p>
+        <p class="w-100 text-start"><strong>Name:</strong> {{ userProfile.name }}</p>
+        <p class="w-100 text-start"><strong>Email:</strong> {{ userProfile.email }}</p>
+        <p class="w-100 text-start"><strong>Phone Number:</strong> {{ userProfile.phone_number }}</p>
+        <p class="w-100 text-start"><strong>Age:</strong> {{ userProfile.age }}</p>
+        <p class="w-100 text-start"><strong>Username:</strong> {{ userProfile.username }}</p>
+        <p class="w-100 text-start"><strong>Gender:</strong> {{ userProfile.gender }}</p>
+        <p class="w-100 text-start"><strong>Address:</strong> {{ userProfile.address }}</p>
+      </ng-container>
+      <!-- Edit Mode -->
+      <form *ngIf="editingProfile" (ngSubmit)="saveProfile()" class="w-100">
+        <div class="mb-2">
+          <label class="form-label"><strong>Name:</strong></label>
+          <input class="form-control" [(ngModel)]="userProfile.name" name="name" required>
+        </div>
+        <div class="mb-2">
+          <label class="form-label"><strong>Email:</strong></label>
+          <input class="form-control" [(ngModel)]="userProfile.email" name="email" required>
+        </div>
+        <div class="mb-2">
+          <label class="form-label"><strong>Phone Number:</strong></label>
+          <input class="form-control" [(ngModel)]="userProfile.phone_number" name="phone_number">
+        </div>
+        <div class="mb-2">
+          <label class="form-label"><strong>Age:</strong></label>
+          <input type="number" class="form-control" [(ngModel)]="userProfile.age" name="age">
+        </div>
+        <div class="mb-2">
+          <label class="form-label"><strong>Username:</strong></label>
+          <input class="form-control" [(ngModel)]="userProfile.username" name="username">
+        </div>
+        <div class="mb-2">
+          <label class="form-label"><strong>Gender:</strong></label>
+          <input class="form-control" [(ngModel)]="userProfile.gender" name="gender">
+        </div>
+        <div class="mb-2">
+          <label class="form-label"><strong>Address:</strong></label>
+          <input class="form-control" [(ngModel)]="userProfile.address" name="address">
+        </div>
+        <div class="d-flex justify-content-between">
+          <button type="submit" class="btn btn-primary btn-sm">Save</button>
+          <button type="button" class="btn btn-secondary btn-sm" (click)="editingProfile = false">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Add Car Modal -->
+<div class="modal fade" id="addCarModal" tabindex="-1" aria-labelledby="addCarModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addCarModalLabel">Add Car Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="submitCar()">
+          <div class="form-group mb-3">
+            <label for="carId">ID</label>
+            <input type="number" id="carId" class="form-control" [(ngModel)]="newCar.id" name="id" required />
+          </div>
+          <div class="form-group mb-3">
+            <label for="carModel">Model</label>
+            <input type="text" id="carModel" class="form-control" [(ngModel)]="newCar.model" name="model" required />
+          </div>
+          <div class="form-group mb-3">
+            <label for="carYear">Year</label>
+            <input type="number" id="carYear" class="form-control" [(ngModel)]="newCar.year" name="year" required />
+          </div>
+          <div class="form-group mb-3">
+            <label for="carLicensePlate">License Plate</label>
+            <input type="text" id="carLicensePlate" class="form-control" [(ngModel)]="newCar.licensePlate" name="licensePlate" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
