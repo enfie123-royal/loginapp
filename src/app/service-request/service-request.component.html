@@ -1,0 +1,127 @@
+<div class="container mt-5 p-4 shadow rounded bg-light">
+  <h2 class="text-primary mb-4 text-center">Service Request</h2>
+  <form [formGroup]="serviceForm" (ngSubmit)="submitRequest()">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h4 class="card-title mb-4 text-secondary">Select Services</h4>
+        <div class="row g-3">
+
+          <!-- Car Wash -->
+          <div class="col-md-6">
+            <h6>Car Wash</h6>
+            <select class="form-select" formControlName="carwashType">
+              <option value="" disabled selected>Select Car Wash Type</option>
+              <option value="Basic">Basic (₹300)</option>
+              <option value="Premium">Premium (₹600)</option>
+            </select>
+          </div>
+
+          <!-- Oil Change -->
+          <div class="col-md-6 d-flex align-items-end">
+            <div>
+              <h6>Oil Change</h6>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" formControlName="oilChange" id="oilChange">
+                <label class="form-check-label" for="oilChange">Oil Change</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tire Replacement -->
+          <div class="col-md-6">
+            <h6>Tire Replacement</h6>
+            <select class="form-select" formControlName="tireReplacementType">
+              <option value="" disabled selected>Select Tire Replacement Type</option>
+              <option value="Simple">Simple</option>
+              <option value="Moderate">Moderate</option>
+              <option value="Advanced">Advanced</option>
+            </select>
+          </div>
+
+          <!-- Battery Check -->
+          <div class="col-md-6">
+            <h6>Battery Check</h6>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="batteryCheckType" id="batteryDiagnosis" value="Diagnosis">
+              <label class="form-check-label" for="batteryDiagnosis">Diagnosis</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="batteryCheckType" id="batteryReplace" value="Replace">
+              <label class="form-check-label" for="batteryReplace">Replace</label>
+            </div>
+          </div>
+
+          <!-- General Service -->
+          <div class="col-md-6 d-flex align-items-end">
+            <div>
+              <h6>General Service</h6>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" formControlName="generalService" id="generalService">
+                <label class="form-check-label" for="generalService">General Service</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pickup and Drop -->
+          <div class="col-md-6 d-flex align-items-end">
+            <div>
+              <h6>Pickup and Drop</h6>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" formControlName="pickupDrop" id="pickupDrop">
+                <label class="form-check-label" for="pickupDrop">Pickup and Drop</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- AC Repair -->
+          <div class="col-md-6">
+            <h6>AC Repair</h6>
+            <select class="form-select" formControlName="acRepairType">
+              <option value="" disabled selected>Select AC Repair Type</option>
+              <option value="Cooling Issues">Cooling Issues</option>
+              <option value="Gas Filling">Gas Filling</option>
+            </select>
+          </div>
+
+          <!-- Engine Diagnostics -->
+          <div class="col-md-6 d-flex align-items-end">
+            <div>
+              <h6>Engine Diagnostics</h6>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" formControlName="engineDiagnostics" id="engineDiagnostics">
+                <label class="form-check-label" for="engineDiagnostics">Engine Diagnostics</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Insurance Renewal -->
+          <div class="col-md-6 d-flex align-items-end">
+            <div>
+              <h6>Insurance Renewal</h6>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" formControlName="insuranceRenewal" id="insuranceRenewal">
+                <label class="form-check-label" for="insuranceRenewal">Insurance Renewal</label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Short Description -->
+    <div class="mb-3">
+      <label for="description" class="form-label">Short Description</label>
+      <textarea id="description" formControlName="description" rows="3" class="form-control" placeholder="Describe the issue or request"></textarea>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-success px-5" [disabled]="serviceForm.invalid">Submit Request</button>
+    </div>
+  </form>
+</div>
+
+
+
+
+
