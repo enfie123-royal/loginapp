@@ -1,1 +1,15 @@
-<p>signup works!</p>
+<div>
+    <h2>Sign Up</h2>
+    <form #signupForm="ngForm">
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" ngModel>
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" ngModel>
+      </div>
+      <button (click)="onSignUp()">Sign Up</button>
+    </form>
+  </div>
+  
