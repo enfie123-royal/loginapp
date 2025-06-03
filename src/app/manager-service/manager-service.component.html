@@ -1,0 +1,175 @@
+<h2 class="mb-4 text-center text-primary fw-bold letter-spacing-2">Manager Dashboard</h2>
+
+<div class="mb-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
+  <!-- Left: Received New Requests Button and Filter Button -->
+  <div class="d-flex align-items-center gap-3">
+    <button #newRequestsBtn class="btn btn-outline-primary position-relative shadow-sm" (click)="showNewRequests()">
+      <i class="bi bi-inbox me-1"></i>
+      Received New Requests
+      <span *ngIf="newRequestsCount > 0"
+            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            style="font-size: 0.8rem;">
+        {{ newRequestsCount }}
+        <span class="visually-hidden">new requests</span>
+      </span>
+    </button>
+    <!-- Filter Dropdown Button -->
+    <div class="dropdown">
+      <button class="btn btn-outline-secondary dropdown-toggle shadow-sm" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-funnel"></i> Filter
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+        <li>
+          <a class="dropdown-item" href="#" (click)="filterStatus = 'approved'; showOnlyNew = false;">Sort by Approved</a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="#" (click)="filterStatus = 'rejected'; showOnlyNew = false;">Sort by Rejected</a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="#" (click)="filterStatus = ''; showOnlyNew = false;">Show All</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- Right: Search Box -->
+  <div class="d-flex align-items-center gap-2 bg-light rounded px-3 py-2 shadow-sm">
+    <label #searchLabel for="searchId" class="fw-bold text-primary mb-0">🔍 Search by ID:</label>
+    <input
+      #searchInput
+      id="searchId"
+      type="number"
+      class="form-control w-auto border-primary shadow fw-bold"
+      style="max-width: 200px; font-size: 1.1rem;"
+      placeholder="Enter Request ID"
+      [(ngModel)]="searchId"
+      min="1"
+      autocomplete="off"
+    />
+  </div>
+</div>
+
+<div class="table-responsive rounded shadow-sm">
+  <table #requestsTable class="table table-bordered table-hover table-striped align-middle mb-0">
+    <thead class="table-primary">
+      <tr>
+        <th>ID</th>
+        <th>User Name</th>
+        <th>Email</th>
+        <th>Services</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Worker</th>
+        <th>Assign Work</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let req of displayedRequests | filterById:searchId">
+        <td class="fw-semibold">{{ req.id }}</td>
+        <td class="fw-semibold">{{ req.userName }}</td>
+        <td>{{ req.email }}</td>
+        <td>
+          <ul class="mb-0 ps-3">
+            <li *ngFor="let service of req.services" class="small">{{ service }}</li>
+          </ul>
+        </td>
+        <td class="small">{{ req.description }}</td>
+        <td class="small">{{ req.requestDate | date:'medium' }}</td>
+        <td>
+          <span [ngClass]="{
+              'badge d-inline-flex align-items-center bg-primary-subtle text-primary-emphasis border border-primary fw-semibold px-3 py-2': (req.status || '').trim().toLowerCase() === 'submitted',
+              'badge d-inline-flex align-items-center bg-success-subtle text-success-emphasis border border-success fw-semibold px-3 py-2': (req.status || '').trim().toLowerCase() === 'approved',
+              'badge d-inline-flex align-items-center bg-danger fw-semibold px-3 py-2': (req.status || '').trim().toLowerCase() === 'rejected'
+            }">
+            <ng-container [ngSwitch]="(req.status || '').trim().toLowerCase()">
+              <span *ngSwitchCase="'approved'" class="small fs-6">
+                <i class="bi bi-check-circle-fill me-1"></i>
+                <span class="fw-bold" style="letter-spacing:1px;">Approved</span>
+              </span>
+              <span *ngSwitchCase="'rejected'" class="small fs-6">
+                <i class="bi bi-x-circle-fill me-1"></i>
+                <span class="fw-bold" style="letter-spacing:1px;">Rejected</span>
+              </span>
+              <span *ngSwitchDefault class="small fs-6">
+                <i class="bi bi-hourglass-split me-1"></i>
+                <span class="fw-bold" style="letter-spacing:1px;">Submitted</span>
+              </span>
+            </ng-container>
+          </span>
+        </td>
+        <!-- Worker column -->
+        <td>
+          <ng-container *ngIf="(req.status || '').trim().toLowerCase() === 'approved'; else notAssigned">
+            <span class="fw-semibold text-success">
+              <i class="bi bi-person-badge me-1"></i>
+              {{ req.assignedWorkerName }}
+              <span *ngIf="req.assignedWorkerId" class="text-muted">(#{{ req.assignedWorkerId }})</span>
+            </span>
+          </ng-container>
+          <ng-template #notAssigned>
+            <span class="text-muted">N/A</span>
+          </ng-template>
+        </td>
+        <td>
+          <ng-container *ngIf="(req.status || '').trim().toLowerCase() === 'submitted'; else disabledAssign">
+            <select
+              class="form-select form-select-sm mb-2"
+              [(ngModel)]="assignType[req.id]"
+              [attr.name]="'assignType_' + req.id">
+              <option value="" disabled>Select Assign Type</option>
+              <option value="random">Random Assign</option>
+              <option value="manual">Manual Assign</option>
+            </select>
+            <div *ngIf="assignType[req.id] === 'manual'">
+              <select
+                class="form-select form-select-sm"
+                [(ngModel)]="selectedWorker[req.id]"
+                [attr.name]="'worker_' + req.id">
+                <option value="" disabled>Select Worker</option>
+                <option *ngFor="let worker of workers" [value]="worker.id">{{ worker.name }}</option>
+              </select>
+            </div>
+          </ng-container>
+          <ng-template #disabledAssign>
+            <span class="text-muted">N/A</span>
+          </ng-template>
+        </td>
+        <td>
+          <div class="d-flex gap-2">
+            <button class="btn btn-success btn-sm shadow"
+                    (click)="approveRequest(req)"
+                    [disabled]="(req.status || '').trim().toLowerCase() !== 'submitted' || (assignType[req.id] === 'manual' && !selectedWorker[req.id])">
+              <i class="bi bi-check-circle"></i> Approve
+            </button>
+            <button class="btn btn-danger btn-sm shadow"
+                    (click)="rejectRequest(req)"
+                    [disabled]="(req.status || '').trim().toLowerCase() !== 'submitted'">
+              <i class="bi bi-x-circle"></i> Reject
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="showWelcome" class="welcome-popup">
+  <div class="welcome-content animate-pop">
+    <h1 class="mb-0 text-primary fw-bold">Welcome, Manager!</h1>
+  </div>
+</div>
+
+
+
+<!-- Only show this when the manager clicks "Received New Requests" and there are no new requests -->
+<div *ngIf="showOnlyNew && newRequestsCount === 0" class="no-requests-popup animate-pop">
+  <div class="no-requests-content text-center">
+    <div style="font-size:3rem;">😴</div>
+    <h2 class="mt-2 mb-0 text-secondary fw-bold">No New Requests</h2>
+    <div class="text-muted">You're all caught up!</div>
+  </div>
+</div>
+
+<div [class.blur]="showWelcome">
+</div>

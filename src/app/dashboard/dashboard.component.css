@@ -1,0 +1,86 @@
+.dashboard-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+button {
+  font-size: 16px;
+}
+
+.list-group-item {
+  text-align: left;
+}
+
+
+/* Notification button style */
+.notification-btn {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  background: linear-gradient(135deg, #4f8cff 60%, #6fe7dd 100%);
+  color: #fff;
+  border: none;
+  transition: box-shadow 0.2s, background 0.2s;
+}
+.notification-btn:hover, .notification-btn:focus {
+  background: linear-gradient(135deg, #6fe7dd 60%, #4f8cff 100%);
+  box-shadow: 0 6px 24px rgba(79,140,255,0.2);
+  color: #fff;
+}
+
+/* Highlight the notification button when active */
+.notification-btn.active,
+.notification-btn:focus {
+  background: linear-gradient(135deg, #6fe7dd 60%, #4f8cff 100%);
+  box-shadow: 0 0 0 0.25rem rgba(79,140,255,0.3), 0 6px 24px rgba(79,140,255,0.2);
+  outline: none;
+}
+
+/* Attractive popup with animation */
+.notification-popup {
+  transform: translateX(120%);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(.68,-0.55,.27,1.55), opacity 0.4s;
+  pointer-events: none;
+  min-width: 320px;
+  max-width: 90vw;
+  border-radius: 1rem;
+  box-shadow: 0 8px 32px rgba(79,140,255,0.15), 0 2px 8px rgba(0,0,0,0.08);
+  border: none;
+  background: #fff;
+  animation: popIn 0.5s;
+}
+.notification-popup.show {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+  animation: popIn 0.5s;
+}
+@keyframes popIn {
+  0% { opacity: 0; transform: translateX(120%) scale(0.95);}
+  70% { opacity: 1; transform: translateX(-10px) scale(1.03);}
+  100% { opacity: 1; transform: translateX(0) scale(1);}
+}
+
+/* Badge style on active notification button */
+.notification-btn.active .badge {
+  box-shadow: 0 0 8px 2px #ff4f4f;
+}
+
+/* Notification overlay style */
+.notification-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255,255,255,0.7);
+  z-index: 1999;
+  transition: background 0.3s;
+  animation: fadeInOverlay 0.4s;
+}
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+

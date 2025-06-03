@@ -1,0 +1,54 @@
+/* Heading letter spacing */
+.letter-spacing-2 { letter-spacing: 2px; }
+
+/* Table styling */
+.table thead th { vertical-align: middle; text-align: center; }
+.table tbody td, .table tbody th { vertical-align: middle; }
+
+/* Welcome popup animation and blur */
+.welcome-popup {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 2000;
+  background: rgba(255,255,255,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.welcome-content {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  padding: 3rem 4rem;
+  text-align: center;
+}
+.animate-pop {
+  animation: popIn 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+}
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.5);}
+  70% { opacity: 1; transform: scale(1.1);}
+  100% { opacity: 1; transform: scale(1);}
+}
+.blur {
+  filter: blur(2px);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* No requests popup */
+.no-requests-popup {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 2100;
+  background: rgba(255,255,255,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.no-requests-content {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  padding: 2.5rem 3rem;
+}
